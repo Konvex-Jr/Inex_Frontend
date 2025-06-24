@@ -1,0 +1,34 @@
+.message {
+  max-width: 80%;
+  align-self: flex-start;
+}
+
+.user-message {
+  align-self: flex-end;
+}
+
+.message-content {
+  padding: 16px 20px;
+  border-radius: 20px;
+  font-size: 16px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+}
+
+.ai-message .message-content {
+  background-color: #1f1f1f;
+  color: #e0e0e0;
+  border-bottom-left-radius: 5px;
+}
+
+.user-message .message-content {
+  background: linear-gradient(135deg, #6e40c9, #4c00ff);
+  color: white;
+  border-bottom-right-radius: 5px;
+}
+
+@media (max-width: 768px) {
+  .message {
+    max-width: 90%;
+  }
+}

@@ -1,7 +1,8 @@
 import React, { useState, useRef, useEffect, forwardRef, useImperativeHandle } from 'react';
-import Message from './Message';
-import { askQuestion } from '../services/api';
-import '../App.css';
+import Message from '../Message/Message';
+import { askQuestion } from '../../services/api';
+import './Chat.css';
+import { marked } from 'marked';
 
 const Chat = forwardRef(({ showWelcome, setShowWelcome }, ref) => {
   const [messages, setMessages] = useState([]);
@@ -48,7 +49,7 @@ const Chat = forwardRef(({ showWelcome, setShowWelcome }, ref) => {
 
     try {
       const data = await askQuestion(message);
-      const aiMessage = { text: data.answer, isUser: false };
+      const aiMessage = { text: marked(data.answer), isUser: false };
       setMessages(prev => [...prev, aiMessage]);
     } catch (error) {
       console.error('Erro ao fazer a pergunta:', error);

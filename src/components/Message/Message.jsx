@@ -1,10 +1,14 @@
 import React from "react";
-import "../App.css";
+import "./Message.css";
+import DOMPurify from 'dompurify';
 
 const Message = ({ text, isUser }) => {
   return (
     <div className={`message ${isUser ? "user-message" : "ai-message"}`}>
-      <div className="message-content">{text}</div>
+      <div
+        className="message-content"
+        dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(text) }}
+      />
     </div>
   );
 };
