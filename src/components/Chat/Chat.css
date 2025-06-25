@@ -28,8 +28,6 @@
   font-style: italic;
 }
 
-
-
 .chat-input-form {
   display: flex;
   padding: 10px 15px;
@@ -147,6 +145,22 @@
   color: #888;
   font-size: 12px;
   padding: 0 10px;
+}
+
+.cancel-button {
+  background: linear-gradient(135deg, #6e40c9, #4c00ff);
+  color: white;
+  font-size: 30px;
+  font-weight: bold;
+  border: none;
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 4px;
 }
 
 @media (max-width: 768px) {
