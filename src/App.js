@@ -20,7 +20,7 @@ function App() {
     <div className="app">
       <header className="app-header">
         <div className="logo-container">
-          <h1>InExIA</h1>
+          <h1>InExAI</h1>
         </div>
         <p className="subtitle">Seu assistente de inteligência artificial</p>
       </header>
