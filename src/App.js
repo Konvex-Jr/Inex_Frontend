@@ -22,7 +22,7 @@ function App() {
         <div className="logo-container">
           <h1>InExIA</h1>
         </div>
-        <p className="subtitle">Seu assistente de inteligência artificial</p>
+        <p className="subtitle">Onde a transformação interior encontra a inteligência artificial</p>
       </header>
 
       <main className="app-main">
@@ -41,10 +41,10 @@ function App() {
               <button
                 className="question-card"
                 onClick={() =>
-                  handleQuestionClick("Como a IDG pode contribuir para os ODS?")
+                  handleQuestionClick("Como os IDGs podem contribuir para os ODS?")
                 }
               >
-                <strong>Como a IDG pode contribuir para os ODS?</strong>
+                <strong>Como os IDGs podem contribuir para os ODS?</strong>
               </button>
               <button
                 className="question-card"
@@ -57,10 +57,10 @@ function App() {
               <button
                 className="question-card"
                 onClick={() =>
-                  handleQuestionClick("Explique a relação entre IDG e sustentabilidade.")
+                  handleQuestionClick("Qual a relação entre IDG e sustentabilidade?")
                 }
               >
-                <strong>Explique a relação entre IDG e sustentabilidade.</strong>
+                <strong>Qual a relação entre IDG e sustentabilidade?</strong>
               </button>
             </div>
           </div>
