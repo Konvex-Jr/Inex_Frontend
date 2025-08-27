@@ -1,6 +1,42 @@
 .message {
   max-width: 80%;
-  align-self: flex-start;
+  padding: 15px 20px;
+  border-radius: 20px;
+  margin-bottom: 10px;
+  word-wrap: break-word;
+  line-height: 1.5;
+}
+
+.message-files {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.message-file-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background-color: rgba(110, 64, 201, 0.1);
+  border: 1px solid rgba(110, 64, 201, 0.3);
+  border-radius: 12px;
+  font-size: 14px;
+  color: #e2e8f0;
+}
+
+.message-file-icon {
+  font-size: 16px;
+}
+
+.message-file-name {
+  font-weight: 500;
+  color: #ffffff;
+}
+
+.message-file-size {
+  color: #a0aec0;
+  font-size: 12px;
 }
 
 .user-message {

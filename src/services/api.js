@@ -2,10 +2,11 @@ import axios from "axios";
 
 const API_URL = "http://localhost:8000";
 
-export const askQuestion = async (question) => {
+export const askQuestion = async (question, file) => {
   try {
     const response = await axios.post(`${API_URL}/ask`, {
       question,
+      file,
       top_k: 3,
     });
 
