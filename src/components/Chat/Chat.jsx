@@ -51,15 +51,27 @@ const Chat = forwardRef(({ showWelcome, setShowWelcome }, ref) => {
   }, [messages, typingMessage]);
 
   const handleSendMessage = async (message) => {
-    if (!message.trim()) return;
+    if (!message.trim() && selectedFiles.length === 0) return;
 
-    const userMessage = { text: message, isUser: true };
+    const userMessage = { 
+      text: message, 
+      isUser: true,
+      files: selectedFiles.length > 0 ? [...selectedFiles] : []
+    };
+    
     setMessages((prev) => [...prev, userMessage]);
     setShowWelcome(false);
     setIsLoading(true);
 
     try {
-      const data = await askQuestion(message);
+      // Se há arquivo anexado, inclui na pergunta
+      let fullMessage = message;
+      if (selectedFiles.length > 0) {
+        const file = selectedFiles[0];
+        fullMessage = `[Arquivo anexado: ${file.name}]\n\n${message}`;
+      }
+      
+      const data = await askQuestion(fullMessage, file);
       cancelTypingRef.current = false;
       setTypingMessage({ fullText: data.answer, text: "", isUser: false });
     } catch (error) {
@@ -115,25 +127,67 @@ const Chat = forwardRef(({ showWelcome, setShowWelcome }, ref) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (input.trim() && !isLoading) {
+    if ((input.trim() || selectedFiles.length > 0) && !isLoading) {
       handleSendMessage(input);
       setInput("");
+      setSelectedFiles([]); // Limpa os arquivos após o envio
     }
   };
 
   const handleKeyDown = (e) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
-      if (input.trim() && !isLoading) {
+      if ((input.trim() || selectedFiles.length > 0) && !isLoading) {
         handleSendMessage(input);
         setInput("");
+        setSelectedFiles([]); // Limpa os arquivos após o envio
       }
     }
   };
 
   const handleFileSelect = (e) => {
     const files = Array.from(e.target.files);
-    setSelectedFiles(prev => [...prev, ...files]);
+    
+    // Limita a apenas 1 arquivo por vez
+    if (files.length > 1) {
+      alert("Por favor, selecione apenas 1 arquivo por vez.");
+      return;
+    }
+    
+    // Verifica se já existe um arquivo selecionado
+    if (selectedFiles.length > 0) {
+      alert("Você já tem um arquivo selecionado. Remova o arquivo atual antes de selecionar outro.");
+      return;
+    }
+    
+    // Valida o tamanho do arquivo (máximo 20MB porque é o maior arquivo que eu vi no BOK)
+    const maxSize = 20 * 1024 * 1024; // 20MB em bytes
+    if (files[0].size > maxSize) {
+      alert("O arquivo é muito grande. Tamanho máximo permitido: 10MB");
+      return;
+    }
+    
+    // Valida o tipo de arquivo (aceita apenas tipos comuns)
+    const allowedTypes = [
+      'text/plain',
+      'application/pdf',
+      'application/msword',
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+      'image/jpeg',
+      'image/png',
+      'image/gif',
+      'image/webp'
+    ];
+    
+    if (!allowedTypes.includes(files[0].type)) {
+      alert("Tipo de arquivo não suportado. Tipos aceitos: texto, PDF, Word, imagens (JPEG, PNG, GIF, WebP)");
+      return;
+    }
+    
+    setSelectedFiles(files);
+    
+    // Limpa o input para permitir selecionar o mesmo arquivo novamente se necessário
+    e.target.value = '';
   };
 
   const removeFile = (index) => {
@@ -141,7 +195,15 @@ const Chat = forwardRef(({ showWelcome, setShowWelcome }, ref) => {
   };
 
   const openFileSelector = () => {
-    fileInputRef.current?.click();
+    // Se já há um arquivo selecionado, pergunta se quer substituir
+    if (selectedFiles.length > 0) {
+      if (window.confirm("Você já tem um arquivo selecionado. Deseja substituí-lo?")) {
+        setSelectedFiles([]);
+        fileInputRef.current?.click();
+      }
+    } else {
+      fileInputRef.current?.click();
+    }
   };
 
   return (
@@ -154,12 +216,21 @@ const Chat = forwardRef(({ showWelcome, setShowWelcome }, ref) => {
             </div>
           ) : (
             <>
-              {messages.map((msg, index) => (
-                <Message key={index} text={msg.text} isUser={msg.isUser} />
-              ))}
-              {typingMessage && (
-                <Message text={typingMessage.text} isUser={false} />
-              )}
+                          {messages.map((msg, index) => (
+              <Message 
+                key={index} 
+                text={msg.text} 
+                isUser={msg.isUser} 
+                files={msg.files || []}
+              />
+            ))}
+            {typingMessage && (
+              <Message 
+                text={typingMessage.text} 
+                isUser={false} 
+                files={[]}
+              />
+            )}
             </>
           )}
           <div ref={messagesEndRef} />
@@ -200,7 +271,7 @@ const Chat = forwardRef(({ showWelcome, setShowWelcome }, ref) => {
             type="button"
             className="file-attach-button"
             onClick={openFileSelector}
-            title="Anexar arquivo"
+            title="Anexar arquivo (máximo 1 arquivo por vez)"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -216,7 +287,6 @@ const Chat = forwardRef(({ showWelcome, setShowWelcome }, ref) => {
           <input
             ref={fileInputRef}
             type="file"
-            multiple
             onChange={handleFileSelect}
             style={{ display: 'none' }}
           />
