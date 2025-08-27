@@ -160,10 +160,10 @@ const Chat = forwardRef(({ showWelcome, setShowWelcome }, ref) => {
       return;
     }
     
-    // Valida o tamanho do arquivo (máximo 20MB porque é o maior arquivo que eu vi no BOK)
-    const maxSize = 20 * 1024 * 1024; // 20MB em bytes
+    // Valida o tamanho do arquivo (máximo 1MB)
+    const maxSize = 1 * 1024 * 1024; // 1mb em bytes
     if (files[0].size > maxSize) {
-      alert("O arquivo é muito grande. Tamanho máximo permitido: 10MB");
+      alert("O arquivo é muito grande. Tamanho máximo permitido: 1MB");
       return;
     }
     
