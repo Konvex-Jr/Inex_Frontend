@@ -7,7 +7,6 @@ import React, {
 } from "react";
 import Message from "../Message/Message";
 import { askQuestion } from "../../services/api";
-import { askQuestionFile } from "../../services/api";
 
 import "./Chat.css";
 
@@ -73,7 +72,7 @@ const Chat = forwardRef(({ showWelcome, setShowWelcome }, ref) => {
       if (selectedFiles.length > 0) {
         const file = selectedFiles[0];
         fullMessage = `[Arquivo anexado: ${file.name}]\n\n${message}`;
-        data = await askQuestionFile(fullMessage, mentorType, file);
+        data = await askQuestion(fullMessage, mentorType, file);
       }
       
       cancelTypingRef.current = false;
