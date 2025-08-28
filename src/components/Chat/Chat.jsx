@@ -73,7 +73,7 @@ const Chat = forwardRef(({ showWelcome, setShowWelcome }, ref) => {
       if (selectedFiles.length > 0) {
         const file = selectedFiles[0];
         fullMessage = `[Arquivo anexado: ${file.name}]\n\n${message}`;
-        let data = await askQuestionFile(fullMessage, mentorType, file);
+        data = await askQuestionFile(fullMessage, mentorType, file);
       }
       
       cancelTypingRef.current = false;
