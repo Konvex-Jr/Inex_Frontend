@@ -7,6 +7,8 @@ import React, {
 } from "react";
 import Message from "../Message/Message";
 import { askQuestion } from "../../services/api";
+import { askQuestionFile } from "../../services/api";
+
 import "./Chat.css";
 
 const Chat = forwardRef(({ showWelcome, setShowWelcome }, ref) => {
@@ -66,12 +68,14 @@ const Chat = forwardRef(({ showWelcome, setShowWelcome }, ref) => {
     try {
       // Se há arquivo anexado, inclui na pergunta
       let fullMessage = message;
+      let data = await askQuestion(fullMessage, mentorType);
+
       if (selectedFiles.length > 0) {
         const file = selectedFiles[0];
         fullMessage = `[Arquivo anexado: ${file.name}]\n\n${message}`;
+        let data = await askQuestionFile(fullMessage, mentorType, file);
       }
       
-      const data = await askQuestion(fullMessage, file);
       cancelTypingRef.current = false;
       setTypingMessage({ fullText: data.answer, text: "", isUser: false });
     } catch (error) {
